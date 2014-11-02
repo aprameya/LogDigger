@@ -1,6 +1,5 @@
 package org.collegeboard.games.numberguess;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -9,38 +8,51 @@ import java.util.Scanner;
  *
  */
 public class App {
-	private Scanner scanner;
-	private PrintWriter output;
-	
-	static String READY_MESSAGE = "Chooses a number in your mind and type “ready” to indicate that you are ready to begin playing. Or type “end” to quit. \n";
-	
-	enum commands{ready,higher,lower,yes,end}
+
+	static String READY_MESSAGE = "Chooses a number in your mind and type 'ready' to indicate that you are ready to begin playing. Or type 'end' to quit.";
+	// Use %f for foloating point numbers.
+	static String REPROMT_MESSAGE = "Is the number %d?";
+	int answer = 0;
+
+	enum Command {
+		ready, higher, lower, yes, end;
+		public static Command fromString(String s) {
+			try {
+				return valueOf(s);
+			} catch (java.lang.IllegalArgumentException e) {
+				return null;
+			}
+		}
+	}
+
+	private CommandAcceptor commandAcceptor;
 
 	public App(Scanner scanner, PrintWriter output) {
-		this.scanner = scanner;
-		this.output = output;
-	}
-	
-	private void execute() {
-		try {
-			acceptReady();
-		} catch (IOException e) {
-			System.out.println("Something is wrong with the system setup. More details below:");
-			e.printStackTrace();	
-		}
+		this.commandAcceptor = new CommandAcceptor(scanner, output);
 	}
 
-	void acceptReady() throws IOException {
-		String command = this.accept();
-		while(!commands.ready.toString().equals(command)){
-			output.println(READY_MESSAGE);
-			output.flush();
-		}
-	}
+	public void execute() {
+		Command c = commandAcceptor.accept(READY_MESSAGE, Command.ready,
+				Command.end);
 
-	private String accept(){
-		//return scanner.nextLine();
-		return scanner.next();
+		// float guess = 30;
+		int guess = 30;
+		int upperLimit = guess, lowerLimit = guess;
+
+		while (!c.equals(Command.yes)) {
+			c = commandAcceptor.accept(String.format(REPROMT_MESSAGE, guess),
+					Command.higher, Command.lower, Command.yes, Command.end);
+			if(Command.higher.equals(c)) {
+				upperLimit = guess*2;
+				lowerLimit = guess;
+			}
+			else if(Command.lower.equals(c)) {
+				upperLimit = guess;
+				lowerLimit = guess/2;
+			}
+			guess=(upperLimit+lowerLimit)/2;
+		}
+		answer = guess;
 	}
 
 	public static void main(String... args) {
