@@ -11,7 +11,6 @@ public class App {
 
 	static String READY_MESSAGE = "Chooses a number in your mind and type 'ready' to indicate that you are ready to begin playing. Or type 'end' to quit.";
 	static String REPROMT_MESSAGE = "Is the number %d?";
-	int answer = 0;
 
 	enum Command {
 		ready, higher, lower, yes, end;
@@ -26,11 +25,11 @@ public class App {
 
 	private CommandAcceptor commandAcceptor;
 
-	public App(Scanner scanner, PrintWriter output) {
-		this.commandAcceptor = new CommandAcceptor(scanner, output);
+	public App(CommandAcceptor commandAcceptor) {
+		this.commandAcceptor = commandAcceptor;
 	}
 
-	public void execute() {
+	public int execute() {
 		Command c = commandAcceptor.accept(READY_MESSAGE, Command.ready,
 				Command.end);
 
@@ -40,8 +39,8 @@ public class App {
 		boolean ceiling_bound = false, floor_bound = false;
 
 		while (!c.equals(Command.yes)) {
-			c = commandAcceptor.accept(String.format(REPROMT_MESSAGE, guess),
-					Command.higher, Command.lower, Command.yes, Command.end);
+			c = commandAcceptor.accept(REPROMT_MESSAGE, guess, Command.higher,
+					Command.lower, Command.yes, Command.end);
 			if (ceiling_bound && floor_bound) {
 				if (Command.higher.equals(c)) {
 					floor = guess;
@@ -63,11 +62,12 @@ public class App {
 				}
 			}
 		}
-		answer = guess;
+		return guess;
 	}
 
 	public static void main(String... args) {
-		App app = new App(new Scanner(System.in), new PrintWriter(System.out));
+		App app = new App(new CommandAcceptor(new Scanner(System.in),
+				new PrintWriter(System.out)));
 		app.execute();
 	}
 

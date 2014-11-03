@@ -1,11 +1,15 @@
 package org.collegeboard.games.numberguess;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Scanner;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import org.collegeboard.games.numberguess.App.Command;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.AdditionalMatchers;
+import org.mockito.Matchers;
 
 /**
  * Unit test for simple App.
@@ -17,13 +21,34 @@ public class AppTest {
 	 */
 	@Test
 	public void testAppTerminates() {
-		String[] commands = { "ready", "higher", "lower", "yes", "end" };
-		StringWriter output = new StringWriter();
-		for (String command : commands) {
-			App app = new App(new Scanner(command), new PrintWriter(output));
+		int testGuesses[] = { 0, 1, 11, 29, 30, 31, 37, 100, 1000000 };
+		for (int expectedAnswer : testGuesses) {
+			CommandAcceptor commandAcceptor = mock(CommandAcceptor.class);
+			when(
+					commandAcceptor.accept(anyString(),
+							Matchers.<Command> anyVararg())).thenReturn(
+					Command.ready);
+			when(
+					commandAcceptor.accept(anyString(),
+							AdditionalMatchers.gt(expectedAnswer),
+							Matchers.<Command> anyVararg())).thenReturn(
+					Command.lower);
+			when(
+					commandAcceptor.accept(anyString(),
+							AdditionalMatchers.lt(expectedAnswer),
+							Matchers.<Command> anyVararg())).thenReturn(
+					Command.higher);
+			when(
+					commandAcceptor.accept(anyString(), eq(expectedAnswer),
+							Matchers.<Command> anyVararg())).thenReturn(
+					Command.yes);
+
+			App app = new App(commandAcceptor);
 			try {
-				app.execute();
-				Assert.assertTrue("Game ended successfully.", true);
+				int answer = app.execute();
+				// System.out.println("User Mind:"+expectedAnswer+" Computer guess:"+answer);
+				Assert.assertTrue("Game ended successfully.",
+						answer == expectedAnswer);
 			} catch (Exception e) {
 				System.out.println(e.getClass().getName() + ":"
 						+ e.getMessage());

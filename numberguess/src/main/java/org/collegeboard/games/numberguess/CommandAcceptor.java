@@ -39,6 +39,10 @@ public class CommandAcceptor {
 		}
 	}
 
+	public Command accept(String message, int parameter, Command... commands) {
+		return accept(String.format(message, parameter), commands);
+	}
+
 	private void prompt(String message) {
 		output.println(message);
 		output.flush();
