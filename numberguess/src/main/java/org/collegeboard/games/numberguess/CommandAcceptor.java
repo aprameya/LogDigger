@@ -23,14 +23,14 @@ public class CommandAcceptor {
 	Command accept(String message, Command... commands) {
 		List<Command> expectedCommands = new ArrayList<Command>(
 				Arrays.asList(commands));
-		prompt(message+String.format(" Type one of %s", Arrays.asList(commands)));
+		prompt(message
+				+ String.format(" Type one of %s", Arrays.asList(commands)));
 		try {
 			String input = scanner.next();
-			while (input == null
-					|| (Command.fromString(input) == null)
-					|| !expectedCommands
-							.contains(Command.fromString(input))) {
-				prompt(INVALID_INPUT+String.format(" Expected %s", Arrays.asList(commands)));
+			while (input == null || (Command.fromString(input) == null)
+					|| !expectedCommands.contains(Command.fromString(input))) {
+				prompt(INVALID_INPUT
+						+ String.format(" Expected %s", Arrays.asList(commands)));
 				input = scanner.next();
 			}
 			return Command.fromString(input);

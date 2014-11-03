@@ -10,7 +10,6 @@ import java.util.Scanner;
 public class App {
 
 	static String READY_MESSAGE = "Chooses a number in your mind and type 'ready' to indicate that you are ready to begin playing. Or type 'end' to quit.";
-	// Use %f for foloating point numbers.
 	static String REPROMT_MESSAGE = "Is the number %d?";
 	int answer = 0;
 
@@ -35,22 +34,34 @@ public class App {
 		Command c = commandAcceptor.accept(READY_MESSAGE, Command.ready,
 				Command.end);
 
-		// float guess = 30;
+		// TODO: Is there really a best set of initial values? Probably not.
 		int guess = 30;
-		int upperLimit = guess, lowerLimit = guess;
+		int floor = 0, ceiling = guess * 2;
+		boolean ceiling_bound = false, floor_bound = false;
 
 		while (!c.equals(Command.yes)) {
 			c = commandAcceptor.accept(String.format(REPROMT_MESSAGE, guess),
 					Command.higher, Command.lower, Command.yes, Command.end);
-			if(Command.higher.equals(c)) {
-				upperLimit = guess*2;
-				lowerLimit = guess;
+			if (ceiling_bound && floor_bound) {
+				if (Command.higher.equals(c)) {
+					floor = guess;
+				} else if (Command.lower.equals(c)) {
+					ceiling = guess;
+				}
+				guess = (ceiling + floor) / 2;
+			} else {
+				if (Command.higher.equals(c)) {
+					floor_bound = true;
+					floor = guess;
+					guess = (guess == 0 ? 1 : guess * 2);
+				} else if (Command.lower.equals(c)) {
+					ceiling_bound = true;
+					ceiling = guess;
+					guess = (guess == 0 ? 0
+							: (floor_bound ? ((ceiling + floor) / 2)
+									: (ceiling / 2)));
+				}
 			}
-			else if(Command.lower.equals(c)) {
-				upperLimit = guess;
-				lowerLimit = guess/2;
-			}
-			guess=(upperLimit+lowerLimit)/2;
 		}
 		answer = guess;
 	}

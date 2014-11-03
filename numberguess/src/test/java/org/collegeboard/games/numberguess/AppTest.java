@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Scanner;
 
-import org.collegeboard.games.numberguess.App.Command;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,11 +21,12 @@ public class AppTest {
 		StringWriter output = new StringWriter();
 		for (String command : commands) {
 			App app = new App(new Scanner(command), new PrintWriter(output));
-			try{
+			try {
 				app.execute();
 				Assert.assertTrue("Game ended successfully.", true);
-			}catch(Exception e){
-				System.out.println(e.getClass().getName()+":"+e.getMessage());
+			} catch (Exception e) {
+				System.out.println(e.getClass().getName() + ":"
+						+ e.getMessage());
 				Assert.assertTrue(e.getMessage(), false);
 			}
 		}
