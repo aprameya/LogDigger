@@ -46,7 +46,7 @@ public class AppTest {
 			App app = new App(commandAcceptor);
 			try {
 				int answer = app.execute();
-				// System.out.println("User Mind:"+expectedAnswer+" Computer guess:"+answer);
+				System.out.println("User Mind:"+expectedAnswer+" Computer guess:"+answer);
 				Assert.assertTrue("Game ended successfully.",
 						answer == expectedAnswer);
 			} catch (Exception e) {

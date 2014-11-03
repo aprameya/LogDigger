@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class App {
 
-	static String READY_MESSAGE = "Chooses a number in your mind and type 'ready' to indicate that you are ready to begin playing. Or type 'end' to quit.";
+	static String READY_MESSAGE = "Chooses a positive number in your mind and type 'ready' to indicate that you are ready to begin playing. Or type 'end' to quit.";
 	static String REPROMT_MESSAGE = "Is the number %d?";
 
 	enum Command {

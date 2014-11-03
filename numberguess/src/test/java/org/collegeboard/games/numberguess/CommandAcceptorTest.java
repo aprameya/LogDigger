@@ -25,6 +25,7 @@ public class CommandAcceptorTest {
 					command), new PrintWriter(output));
 			Command c = commandAcceptor.accept("testUserInputAcceptance",
 					Command.fromString(command));
+			System.out.println("Expected command:"+command+" Received:"+c);
 			Assert.assertTrue(Command.fromString(command).equals(c));
 		}
 	}
@@ -42,6 +43,7 @@ public class CommandAcceptorTest {
 					command), new PrintWriter(output));
 			Command c = commandAcceptor.accept("testUserInputAcceptance",
 					Command.end);
+			System.out.println("Expected command:"+command+" Received:"+c);
 			Assert.assertTrue(output.toString().contains(
 					CommandAcceptor.INVALID_INPUT));
 			Assert.assertTrue(c == null);
