@@ -17,6 +17,7 @@ public class NumberGuessingGame {
 	/** Messages used by the game to interact with the user */
 	static String READY_MESSAGE = "Chooses a positive number in your mind and type 'ready' to indicate that you are ready to begin playing. Or type 'end' to quit.";
 	static String REPROMT_MESSAGE = "Is the number %d?";
+	static int RETURN_VALUE_UPON_USER_REQUESTING_END = Integer.MIN_VALUE;
 
 	/**
 	 * Enumeration of commands accepted from the user by the game.
@@ -24,8 +25,7 @@ public class NumberGuessingGame {
 	 */
 	enum Command {
 		/**
-		 * 'ready, higher, lower, yes' are expected commands from the user.
-		 * 'end' is used by the system to represent lack of input.
+		 * 'ready, higher, lower, yes, end' are the only expected commands from the user.
 		 */
 		ready, higher, lower, yes, end;
 		
@@ -77,6 +77,9 @@ public class NumberGuessingGame {
 		Command c = commandAcceptor.accept(READY_MESSAGE, Command.ready,
 				Command.end);
 
+		if(Command.end.equals(c))
+			return RETURN_VALUE_UPON_USER_REQUESTING_END;
+		
 		// TODO: Is there really a best set of initial values? Probably not.
 		int guess = 30;
 		int floor = 0, ceiling = guess * 2;
@@ -85,6 +88,10 @@ public class NumberGuessingGame {
 		while (!c.equals(Command.yes)) {
 			c = commandAcceptor.accept(REPROMT_MESSAGE, guess, Command.higher,
 					Command.lower, Command.yes, Command.end);
+			
+			if(Command.end.equals(c))
+				return RETURN_VALUE_UPON_USER_REQUESTING_END;
+			
 			if (ceiling_bound && floor_bound) {
 				if (Command.higher.equals(c)) {
 					floor = guess;

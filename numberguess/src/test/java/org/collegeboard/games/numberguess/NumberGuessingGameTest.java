@@ -20,7 +20,7 @@ public class NumberGuessingGameTest {
 	 * Test that the program successfully completes.
 	 */
 	@Test
-	public void testAppTerminates() {
+	public void testGameCompletesSuccessfully() {
 		int testGuesses[] = { 0, 1, 11, 29, 30, 31, 37, 100, 1000000 };
 		for (int expectedAnswer : testGuesses) {
 			CommandAcceptor commandAcceptor = mock(CommandAcceptor.class);
@@ -46,7 +46,7 @@ public class NumberGuessingGameTest {
 			NumberGuessingGame app = new NumberGuessingGame(commandAcceptor);
 			try {
 				int answer = app.execute();
-				//System.out.println("User mind:"+expectedAnswer+" Computer guess:"+answer);
+				// System.out.println("User mind:"+expectedAnswer+" Computer guess:"+answer);
 				Assert.assertTrue("Game ended successfully.",
 						answer == expectedAnswer);
 			} catch (Exception e) {
@@ -54,6 +54,58 @@ public class NumberGuessingGameTest {
 						+ e.getMessage());
 				Assert.assertTrue(e.getMessage(), false);
 			}
+		}
+	}
+
+	/**
+	 * Test that the program successfully completes.
+	 */
+	@Test
+	public void testGameQuitsUponEndCommand() {
+		int testGuesses[] = { 0, 1, 11, 29, 30, 31, 37, 100, 1000000 };
+		for(int expectedAnswer:testGuesses){
+		//int expectedAnswer = 35;
+		CommandAcceptor commandAcceptor = mock(CommandAcceptor.class);
+		when(
+				commandAcceptor.accept(anyString(),
+						Matchers.<Command> anyVararg()))
+				.thenReturn(Command.end).thenReturn(Command.ready)
+				.thenReturn(Command.end);
+		when(
+				commandAcceptor.accept(anyString(),
+						AdditionalMatchers.gt(expectedAnswer),
+						Matchers.<Command> anyVararg()))
+				.thenReturn(Command.lower)
+				.thenReturn(Command.end);
+		when(
+				commandAcceptor.accept(anyString(),
+						AdditionalMatchers.lt(expectedAnswer),
+						Matchers.<Command> anyVararg()))
+				.thenReturn(Command.higher)
+				.thenReturn(Command.higher)
+				.thenReturn(Command.higher)
+				.thenReturn(Command.higher)
+				.thenReturn(Command.end);
+		when(
+				commandAcceptor.accept(anyString(), eq(expectedAnswer),
+						Matchers.<Command> anyVararg()))
+				.thenReturn(Command.end)
+				.thenReturn(Command.yes);
+		for (int i = 0; i < 3; i++) {
+
+			NumberGuessingGame app = new NumberGuessingGame(commandAcceptor);
+			try {
+				int answer = app.execute();
+				// System.out.println("User mind:"+expectedAnswer+" Computer guess:"+answer);
+				Assert.assertTrue(
+						"Game quit upon user request.",
+						answer == NumberGuessingGame.RETURN_VALUE_UPON_USER_REQUESTING_END);
+			} catch (Exception e) {
+				System.out.println(e.getClass().getName() + ":"
+						+ e.getMessage());
+				Assert.assertTrue(e.getMessage(), false);
+			}
+		}
 		}
 	}
 }
