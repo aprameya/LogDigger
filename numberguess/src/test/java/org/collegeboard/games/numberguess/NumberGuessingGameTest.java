@@ -5,7 +5,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.collegeboard.games.numberguess.App.Command;
+import org.collegeboard.games.numberguess.NumberGuessingGame.Command;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
@@ -14,7 +14,7 @@ import org.mockito.Matchers;
 /**
  * Unit test for simple App.
  */
-public class AppTest {
+public class NumberGuessingGameTest {
 
 	/**
 	 * Test that the program successfully completes.
@@ -43,10 +43,10 @@ public class AppTest {
 							Matchers.<Command> anyVararg())).thenReturn(
 					Command.yes);
 
-			App app = new App(commandAcceptor);
+			NumberGuessingGame app = new NumberGuessingGame(commandAcceptor);
 			try {
 				int answer = app.execute();
-				System.out.println("User Mind:"+expectedAnswer+" Computer guess:"+answer);
+				//System.out.println("User mind:"+expectedAnswer+" Computer guess:"+answer);
 				Assert.assertTrue("Game ended successfully.",
 						answer == expectedAnswer);
 			} catch (Exception e) {
