@@ -25,10 +25,11 @@ public class NumberGuessingGame {
 	 */
 	enum Command {
 		/**
-		 * 'ready, higher, lower, yes, end' are the only expected commands from the user.
+		 * 'ready, higher, lower, yes, end' are the only expected commands from
+		 * the user.
 		 */
 		ready, higher, lower, yes, end;
-		
+
 		/**
 		 * Converts a String to a enumerated value if there is a match. Returns
 		 * null when there is no match.
@@ -77,9 +78,9 @@ public class NumberGuessingGame {
 		Command c = commandAcceptor.accept(READY_MESSAGE, Command.ready,
 				Command.end);
 
-		if(Command.end.equals(c))
+		if (Command.end.equals(c))
 			return RETURN_VALUE_UPON_USER_REQUESTING_END;
-		
+
 		// TODO: Is there really a best set of initial values? Probably not.
 		int guess = 30;
 		int floor = 0, ceiling = guess * 2;
@@ -88,10 +89,10 @@ public class NumberGuessingGame {
 		while (!c.equals(Command.yes)) {
 			c = commandAcceptor.accept(REPROMT_MESSAGE, guess, Command.higher,
 					Command.lower, Command.yes, Command.end);
-			
-			if(Command.end.equals(c))
+
+			if (Command.end.equals(c))
 				return RETURN_VALUE_UPON_USER_REQUESTING_END;
-			
+
 			if (ceiling_bound && floor_bound) {
 				if (Command.higher.equals(c)) {
 					floor = guess;
