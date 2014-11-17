@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -14,18 +13,21 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 /**
- * A simple app applying MapReduce to data set
- *
+ * A simple app applying MapReduce to data set consisting of access log entries
+ * corresponding to user visits to a website. The goal is to determine whether
+ * or not a particular IP address has visited a site within a particular time
+ * frame.
  */
 public class MapReduceJobApp {
 	public static void main(String[] args) throws IOException,
 			ClassNotFoundException, InterruptedException {
-		
-		if(args.length!=2){
-			System.out.println("Usage: MapReduceJobApp inputdirectory outputdirectory");
+
+		if (args.length != 2) {
+			System.out
+					.println("Usage: MapReduceJobApp inputdirectory outputdirectory");
 			System.exit(-1);
 		}
-		
+
 		Path inputPath = new Path(args[0]);
 		Path outputDir = new Path(args[1]);
 
@@ -43,7 +45,7 @@ public class MapReduceJobApp {
 
 		// Specify key / value
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
+		job.setOutputValueClass(Text.class);
 
 		// Input
 		FileInputFormat.addInputPath(job, inputPath);
@@ -60,7 +62,11 @@ public class MapReduceJobApp {
 
 		// Execute job
 		int code = job.waitForCompletion(true) ? 0 : 1;
-		
+
+		// TODO: We are not done yet. There has to be an automated response to
+		// the user indicating 'whether or not a particular IP address has
+		// visited a site within a particular time frame.'
+
 		System.exit(code);
 	}
 }

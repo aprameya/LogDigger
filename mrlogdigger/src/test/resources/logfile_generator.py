@@ -1,6 +1,9 @@
 #!/usr/bin/env python 
 import sys, random, datetime, time 
 
+#The original script is modified to produce a more realistic access log file 
+#consisting of timestamps of user visits along with the user's IP address.
+
 def main(count): 
 	for x in range(count): 
 		first_number = random.randint(0, 255) 

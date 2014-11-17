@@ -15,7 +15,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for the Map Reduce job
+ * Unit test for the Map Reduce job that tests Mapper and Reducer components
+ * independently, and without using a Hadoop setup. This will ensure that the
+ * MapReduce job is correctly written without having to use it in a hadoop
+ * infrastructure.
  */
 public class MapReduceJobAppTest extends TestCase {
 	MapDriver<Object, Text, Text, Text> mapDriver;

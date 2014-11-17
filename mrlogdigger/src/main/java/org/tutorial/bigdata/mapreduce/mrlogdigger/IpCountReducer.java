@@ -8,6 +8,12 @@ import java.util.Date;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
+/**
+ * The reducer component of MR algorithm, that collects the
+ * IP-address:log-timestamp tuples produced by the mapper and computes the
+ * interval of user visit session to the website, eventually producing tuples of
+ * the form IP-address:visit-start-time - visit-end-time.
+ */
 public class IpCountReducer extends Reducer<Text, Text, Text, Text> {
 	// log line of the form [2013-07-16 02:55:43] 94.120.169.22
 	private SimpleDateFormat dateformat = new SimpleDateFormat(
