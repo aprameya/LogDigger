@@ -20,6 +20,12 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 public class MapReduceJobApp {
 	public static void main(String[] args) throws IOException,
 			ClassNotFoundException, InterruptedException {
+		
+		if(args.length!=2){
+			System.out.println("Usage: MapReduceJobApp inputdirectory outputdirectory");
+			System.exit(-1);
+		}
+		
 		Path inputPath = new Path(args[0]);
 		Path outputDir = new Path(args[1]);
 
